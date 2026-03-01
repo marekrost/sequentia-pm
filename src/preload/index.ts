@@ -49,6 +49,31 @@ const api = {
       callback(filePath)
     ipcRenderer.on('file:removed', handler)
     return () => ipcRenderer.removeListener('file:removed', handler)
+  },
+
+  getRecentProjects: (): Promise<string[]> =>
+    ipcRenderer.invoke('store:getRecentProjects'),
+
+  addRecentProject: (projectPath: string): Promise<string[]> =>
+    ipcRenderer.invoke('store:addRecentProject', projectPath),
+
+  onMenuOpenProject: (callback: () => void): (() => void) => {
+    const handler = (): void => callback()
+    ipcRenderer.on('menu:open-project', handler)
+    return () => ipcRenderer.removeListener('menu:open-project', handler)
+  },
+
+  onMenuOpenRecent: (callback: (projectPath: string) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, projectPath: string): void =>
+      callback(projectPath)
+    ipcRenderer.on('menu:open-recent', handler)
+    return () => ipcRenderer.removeListener('menu:open-recent', handler)
+  },
+
+  onMenuCloseProject: (callback: () => void): (() => void) => {
+    const handler = (): void => callback()
+    ipcRenderer.on('menu:close-project', handler)
+    return () => ipcRenderer.removeListener('menu:close-project', handler)
   }
 }
 

@@ -11,7 +11,29 @@ function App(): React.JSX.Element {
   const activeTabIndex = useProjectStore((s) => s.activeTabIndex)
   const setActiveTab = useProjectStore((s) => s.setActiveTab)
 
+  const openProject = useProjectStore((s) => s.openProject)
+  const closeProject = useProjectStore((s) => s.closeProject)
+
   useFileWatcher()
+
+  // Menu event handlers
+  useEffect(() => {
+    const unsubOpen = window.api.onMenuOpenProject(async () => {
+      const path = await window.api.openDirectoryDialog()
+      if (path) await openProject(path)
+    })
+    const unsubRecent = window.api.onMenuOpenRecent(async (path) => {
+      await openProject(path)
+    })
+    const unsubClose = window.api.onMenuCloseProject(() => {
+      closeProject()
+    })
+    return () => {
+      unsubOpen()
+      unsubRecent()
+      unsubClose()
+    }
+  }, [openProject, closeProject])
 
   // Tab switching: Ctrl+Tab / Ctrl+Shift+Tab
   useEffect(() => {

@@ -23,6 +23,7 @@ export const useProjectStore = create<ProjectState>((set) => ({
   openProject: async (path: string) => {
     const files = await window.api.scanDirectory(path)
     set({ projectPath: path, files, activeTabIndex: 0, dirtyFiles: new Set() })
+    window.api.addRecentProject(path)
   },
 
   closeProject: () => {

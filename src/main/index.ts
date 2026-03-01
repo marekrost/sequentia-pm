@@ -1,6 +1,7 @@
 import { app, BrowserWindow, shell } from 'electron'
 import { join } from 'path'
 import { registerIpcHandlers } from './ipc/handlers'
+import { buildAppMenu } from './menu'
 
 const isDev = !app.isPackaged
 
@@ -20,6 +21,7 @@ function createWindow(): BrowserWindow {
   })
 
   registerIpcHandlers(mainWindow)
+  buildAppMenu(mainWindow)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

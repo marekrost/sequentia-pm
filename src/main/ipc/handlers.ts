@@ -3,6 +3,8 @@ import { readFile, writeFile } from './fileOperations'
 import { scanDirectory } from '../utils/directoryScanner'
 import { WatcherService } from './watcherService'
 import { run as renderDbml } from '@softwaretechnik/dbml-renderer'
+import { getRecentProjects, addRecentProject } from '../utils/recentProjects'
+import { buildAppMenu } from '../menu'
 
 export function registerIpcHandlers(mainWindow: BrowserWindow): void {
   const watcher = new WatcherService(mainWindow)
@@ -42,5 +44,15 @@ export function registerIpcHandlers(mainWindow: BrowserWindow): void {
 
   ipcMain.handle('watcher:stop', async () => {
     watcher.close()
+  })
+
+  ipcMain.handle('store:getRecentProjects', () => {
+    return getRecentProjects()
+  })
+
+  ipcMain.handle('store:addRecentProject', (_e, projectPath: string) => {
+    const result = addRecentProject(projectPath)
+    buildAppMenu(mainWindow)
+    return result
   })
 }

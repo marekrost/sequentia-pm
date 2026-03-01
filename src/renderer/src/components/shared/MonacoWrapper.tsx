@@ -1,10 +1,14 @@
-import { useEffect, useRef } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import * as monaco from 'monaco-editor'
 import { loader } from '@monaco-editor/react'
 import Editor from '@monaco-editor/react'
 
 // Use local monaco instance — no CDN fetch (air-gapped safe)
 loader.config({ monaco })
+
+export interface MonacoHandle {
+  getEditor: () => monaco.editor.IStandaloneCodeEditor | null
+}
 
 interface MonacoWrapperProps {
   value: string
@@ -14,14 +18,15 @@ interface MonacoWrapperProps {
   readOnly?: boolean
 }
 
-function MonacoWrapper({
-  value,
-  language,
-  onChange,
-  onSave,
-  readOnly = false
-}: MonacoWrapperProps): React.JSX.Element {
+const MonacoWrapper = forwardRef<MonacoHandle, MonacoWrapperProps>(function MonacoWrapper(
+  { value, language, onChange, onSave, readOnly = false },
+  ref
+) {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+
+  useImperativeHandle(ref, () => ({
+    getEditor: () => editorRef.current
+  }))
 
   useEffect(() => {
     const editor = editorRef.current
@@ -58,6 +63,6 @@ function MonacoWrapper({
       }}
     />
   )
-}
+})
 
 export default MonacoWrapper

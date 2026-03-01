@@ -11,6 +11,11 @@ export interface ElectronAPI {
   onFileChanged: (callback: (filePath: string) => void) => () => void
   onFileAdded: (callback: (filePath: string) => void) => () => void
   onFileRemoved: (callback: (filePath: string) => void) => () => void
+  getRecentProjects: () => Promise<string[]>
+  addRecentProject: (projectPath: string) => Promise<string[]>
+  onMenuOpenProject: (callback: () => void) => () => void
+  onMenuOpenRecent: (callback: (projectPath: string) => void) => () => void
+  onMenuCloseProject: (callback: () => void) => () => void
 }
 
 declare global {

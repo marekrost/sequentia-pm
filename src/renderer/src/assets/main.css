@@ -27,3 +27,35 @@
 .rdg-row:hover .rdg-rownum {
   background-color: color-mix(in srgb, var(--rdg-header-background-color), rgba(255, 255, 255, 0.15)) !important;
 }
+
+/* CSV grid: cell range selection highlight */
+.rdg-cell-selected {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+  outline: 1px solid rgba(59, 130, 246, 0.4);
+  outline-offset: -1px;
+}
+
+/* CSV / Markdown toolbar buttons */
+.csv-toolbar-btn,
+.md-toolbar-btn {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #d4d4d4;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.csv-toolbar-btn:hover,
+.md-toolbar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.csv-toolbar-btn:disabled,
+.md-toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.csv-toolbar-btn:disabled:hover,
+.md-toolbar-btn:disabled:hover {
+  background: transparent;
+}
