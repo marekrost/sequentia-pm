@@ -1,7 +1,8 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import MonacoWrapper, { type MonacoHandle } from '../shared/MonacoWrapper'
 import MarkdownPreview from './MarkdownPreview'
+import StatusBar from '../shared/StatusBar'
 import { useFileContent } from '../../hooks/useFileContent'
 import type { ProjectFile } from '../../types/project'
 
@@ -12,6 +13,13 @@ interface MarkdownEditorProps {
 function MarkdownEditor({ file }: MarkdownEditorProps): React.JSX.Element {
   const { content, loading, error, setContent, save } = useFileContent(file.filePath)
   const monacoRef = useRef<MonacoHandle>(null)
+
+  const stats = useMemo(() => {
+    const text = content ?? ''
+    const chars = text.length
+    const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length
+    return { chars, words }
+  }, [content])
 
   const wrapSelection = useCallback((before: string, after: string) => {
     const editor = monacoRef.current?.getEditor()
@@ -60,7 +68,7 @@ function MarkdownEditor({ file }: MarkdownEditorProps): React.JSX.Element {
   return (
     <div className="flex h-full flex-col">
       {/* Toolbar (F-031) */}
-      <div className="flex shrink-0 items-center gap-1 border-b border-neutral-700 bg-neutral-800 px-2 py-1">
+      <div className="flex h-[35px] shrink-0 items-center gap-1 border-b border-neutral-700 bg-neutral-800 px-2">
         <button
           onClick={() => wrapSelection('**', '**')}
           className="md-toolbar-btn font-bold"
@@ -116,6 +124,11 @@ function MarkdownEditor({ file }: MarkdownEditorProps): React.JSX.Element {
           </Panel>
         </PanelGroup>
       </div>
+
+      <StatusBar>
+        <span>{stats.chars.toLocaleString()} characters</span>
+        <span>{stats.words.toLocaleString()} words</span>
+      </StatusBar>
     </div>
   )
 }

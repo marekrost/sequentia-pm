@@ -25,11 +25,11 @@ F-023,Navigation,Tab click navigation,1,Done,Design,Click tab to switch active e
 F-024,UX,Air-gapped editor loading,1,Done,Design,Code editor loads entirely from local assets with no network requests
 F-025,UX,Dark theme,1,Done,Design,Dark neutral color scheme for IDE-like appearance
 F-026,UX,Welcome screen,1,Done,Design,Landing screen with project directory picker when no project is open
-F-027,Core Shell,Recent projects list,2,New,Roadmap,Remember and display recently opened project directories
-F-028,CSV Editor,Add/delete rows,2,New,Roadmap,Insert and remove rows from the spreadsheet grid
-F-029,CSV Editor,Add/delete columns,2,New,Roadmap,Insert and remove columns with header editing
-F-030,CSV Editor,Column sorting,2,New,Roadmap,Click column header to sort rows ascending/descending
-F-031,Markdown Editor,Markdown toolbar,2,New,Roadmap,Toolbar buttons for bold/italic/heading/link/list formatting
+F-027,Core Shell,Recent projects list,2,Done,Roadmap,Remember and display recently opened project directories
+F-028,CSV Editor,Add/delete rows,2,Done,Roadmap,Insert and remove rows from the spreadsheet grid
+F-029,CSV Editor,Add/delete columns,2,Done,Roadmap,Insert and remove columns with header editing
+F-030,CSV Editor,Column sorting,2,Done,Roadmap,Click column header to sort rows ascending/descending
+F-031,Markdown Editor,Markdown toolbar,2,Done,Roadmap,Toolbar buttons for bold/italic/heading/link/list formatting
 F-032,File Management,Auto-save,3,Wish,Roadmap,Optionally auto-save after a configurable debounce period
 F-033,DBML Editor,Pan and drag,3,Wish,Roadmap,Click-and-drag panning of the SVG diagram
 F-034,Export,PDF export,3,Wish,Roadmap,Export rendered markdown or DBML diagrams to PDF
