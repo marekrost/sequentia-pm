@@ -4,7 +4,7 @@ This document governs how all other files in this project folder are created, ma
 
 Both human contributors and AI agents working on this project must follow these rules.
 
-A new project can be reconstructed from this document alone by creating empty files that match the sequence, formats, and column structures defined below.
+A new project management template can be reconstructed from this document alone by creating empty files that match the sequence, formats, and column structures defined below.
 
 ## File sequence and purpose
 
