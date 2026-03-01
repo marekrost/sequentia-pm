@@ -3,9 +3,10 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import MonacoWrapper from '../shared/MonacoWrapper'
 import DbmlPreview from './DbmlPreview'
 import StatusBar from '../shared/StatusBar'
+import EditorToolbar from '../shared/EditorToolbar'
 import { useFileContent } from '../../hooks/useFileContent'
 import { registerDbmlLanguage } from '../../lib/monacoLanguages'
-import type { ProjectFile } from '../../types/project'
+import type { ProjectFile } from '@shared/types/project'
 
 interface DbmlEditorProps {
   file: ProjectFile
@@ -39,6 +40,7 @@ function DbmlEditor({ file }: DbmlEditorProps): React.JSX.Element {
 
   return (
     <div className="flex h-full flex-col">
+      <EditorToolbar />
       <div className="min-h-0 flex-1">
         <PanelGroup direction="horizontal">
           <Panel defaultSize={50} minSize={30}>

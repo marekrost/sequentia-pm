@@ -1,12 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
-
-interface ProjectFile {
-  prefix: number
-  name: string
-  fileName: string
-  filePath: string
-  extension: 'md' | 'csv' | 'dbml'
-}
+import type { ProjectFile } from '@shared/types/project'
 
 const api = {
   openDirectoryDialog: (): Promise<string | null> =>

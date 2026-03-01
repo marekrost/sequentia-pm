@@ -1,4 +1,4 @@
-import type { ProjectFile } from '../renderer/src/types/project'
+import type { ProjectFile } from './project'
 
 export interface ElectronAPI {
   openDirectoryDialog: () => Promise<string | null>

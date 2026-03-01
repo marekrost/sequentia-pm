@@ -1,4 +1,4 @@
-import type { ProjectFile } from '../../types/project'
+import type { ProjectFile } from '@shared/types/project'
 import MarkdownEditor from './MarkdownEditor'
 import CsvEditor from './CsvEditor'
 import DbmlEditor from './DbmlEditor'

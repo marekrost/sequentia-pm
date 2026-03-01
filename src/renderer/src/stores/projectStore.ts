@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { ProjectFile } from '../types/project'
+import type { ProjectFile } from '@shared/types/project'
 
 interface ProjectState {
   projectPath: string | null

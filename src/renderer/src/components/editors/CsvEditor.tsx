@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DataGrid, renderTextEditor, type Column, type SortColumn } from 'react-data-grid'
 import { HyperFormula } from 'hyperformula'
-import type { ProjectFile } from '../../types/project'
+import type { ProjectFile } from '@shared/types/project'
 import { useFileContent } from '../../hooks/useFileContent'
 import { parseCsv, unparseCsv, type CsvData } from '../../lib/csvParser'
 import StatusBar from '../shared/StatusBar'
+import EditorToolbar from '../shared/EditorToolbar'
+import ToolbarButton from '../shared/ToolbarButton'
 import 'react-data-grid/lib/styles.css'
 
 interface CsvEditorProps {
@@ -32,6 +34,16 @@ function normalizeRange(r: CellRange): {
     minCol: Math.min(r.startCol, r.endCol),
     maxCol: Math.max(r.startCol, r.endCol)
   }
+}
+
+function colIndexToLetter(index: number): string {
+  let result = ''
+  let n = index
+  while (n >= 0) {
+    result = String.fromCharCode((n % 26) + 65) + result
+    n = Math.floor(n / 26) - 1
+  }
+  return result
 }
 
 function colKeyToIndex(key: string): number | null {
@@ -138,13 +150,29 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
 
     const norm = cellRange ? normalizeRange(cellRange) : null
 
+    const hf = hfRef.current
+
     const dataColumns: Column<Row>[] = csvData.headers.map((header, i) => ({
       key: `col_${i}`,
       name: header,
       resizable: true,
       editable: true,
       sortable: true,
+      renderHeaderCell: () => (
+        <div className="flex flex-col items-start leading-tight">
+          <span className="text-[10px] text-neutral-500">{colIndexToLetter(i)}</span>
+          <span className="text-xs">{header}</span>
+        </div>
+      ),
       renderEditCell: renderTextEditor,
+      renderCell: ({ row }: { row: Row }) => {
+        const raw = row[`col_${i}`] ?? ''
+        if (hf && raw.startsWith('=')) {
+          const val = hf.getCellValue({ sheet: 0, row: Number(row._rowIdx), col: i })
+          return <>{val != null ? String(val) : raw}</>
+        }
+        return <>{raw}</>
+      },
       minWidth: 80,
       cellClass: norm && i >= norm.minCol && i <= norm.maxCol
         ? (_row: Row, rowIdx: number): string | undefined =>
@@ -157,33 +185,38 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
     return [rowNumColumn, ...dataColumns]
   }, [csvData?.headers, cellRange])
 
-  // Build rows from data, using HyperFormula for computed values
+  // Build rows from data — store raw values so the editor shows formulas
   const baseRows: Row[] = useMemo(() => {
     if (!csvData) return []
-    const hf = hfRef.current
     return csvData.rows.map((row, rowIdx) => {
       const obj: Row = { _rowIdx: String(rowIdx) }
       csvData.headers.forEach((_, colIdx) => {
-        const raw = row[colIdx] ?? ''
-        if (hf && raw.startsWith('=')) {
-          const val = hf.getCellValue({ sheet: 0, row: rowIdx, col: colIdx })
-          obj[`col_${colIdx}`] = val != null ? String(val) : raw
-        } else {
-          obj[`col_${colIdx}`] = raw
-        }
+        obj[`col_${colIdx}`] = row[colIdx] ?? ''
       })
       return obj
     })
   }, [csvData])
 
-  // Sort rows
+  // Sort rows — resolve formulas to computed values for comparison
   const rows = useMemo(() => {
     if (sortColumns.length === 0) return baseRows
+    const hf = hfRef.current
+    const resolve = (row: Row, colKey: string): string => {
+      const raw = row[colKey] ?? ''
+      if (hf && raw.startsWith('=')) {
+        const colIdx = colKeyToIndex(colKey)
+        if (colIdx !== null) {
+          const val = hf.getCellValue({ sheet: 0, row: Number(row._rowIdx), col: colIdx })
+          return val != null ? String(val) : raw
+        }
+      }
+      return raw
+    }
     const sorted = [...baseRows]
     sorted.sort((a, b) => {
       for (const { columnKey, direction } of sortColumns) {
-        const aVal = a[columnKey] ?? ''
-        const bVal = b[columnKey] ?? ''
+        const aVal = resolve(a, columnKey)
+        const bVal = resolve(b, columnKey)
         const aNum = Number(aVal)
         const bNum = Number(bVal)
         let cmp: number
@@ -454,31 +487,26 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Toolbar */}
-      <div className="flex h-[35px] shrink-0 items-center gap-1 border-b border-neutral-700 bg-neutral-800 px-2">
-        <button onClick={handleAddRow} className="csv-toolbar-btn" title="Insert row after selection (or at end)">
+      <EditorToolbar>
+        <ToolbarButton onClick={handleAddRow} title="Insert row after selection (or at end)">
           + Row
-        </button>
-        <button onClick={handleDeleteRow} className="csv-toolbar-btn" title="Delete rows spanned by selection">
+        </ToolbarButton>
+        <ToolbarButton onClick={handleDeleteRow} title="Delete rows spanned by selection">
           − Row
-        </button>
+        </ToolbarButton>
         <span className="mx-1 text-neutral-600">|</span>
-        <button onClick={handleAddColumn} className="csv-toolbar-btn" title="Insert column after selection (or at end)">
+        <ToolbarButton onClick={handleAddColumn} title="Insert column after selection (or at end)">
           + Col
-        </button>
-        <button onClick={handleDeleteColumn} className="csv-toolbar-btn" title="Delete columns spanned by selection">
+        </ToolbarButton>
+        <ToolbarButton onClick={handleDeleteColumn} title="Delete columns spanned by selection">
           − Col
-        </button>
+        </ToolbarButton>
         {sortColumns.length > 0 && (
           <>
             <span className="mx-1 text-neutral-600">|</span>
-            <button
-              onClick={() => setSortColumns([])}
-              className="csv-toolbar-btn"
-              title="Clear sort"
-            >
+            <ToolbarButton onClick={() => setSortColumns([])} title="Clear sort">
               Clear Sort
-            </button>
+            </ToolbarButton>
           </>
         )}
         {selectionInfo && (
@@ -487,7 +515,7 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
             <span className="text-sm text-neutral-400">{selectionInfo}</span>
           </>
         )}
-      </div>
+      </EditorToolbar>
 
       {/* Grid */}
       <div
@@ -497,6 +525,7 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
         <DataGrid
           columns={columns}
           rows={rows}
+          headerRowHeight={44}
           rowKeyGetter={(row) => row._rowIdx}
           onRowsChange={handleRowsChange}
           sortColumns={sortColumns}

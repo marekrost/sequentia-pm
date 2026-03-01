@@ -3,8 +3,10 @@ import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels'
 import MonacoWrapper, { type MonacoHandle } from '../shared/MonacoWrapper'
 import MarkdownPreview from './MarkdownPreview'
 import StatusBar from '../shared/StatusBar'
+import EditorToolbar from '../shared/EditorToolbar'
+import ToolbarButton from '../shared/ToolbarButton'
 import { useFileContent } from '../../hooks/useFileContent'
-import type { ProjectFile } from '../../types/project'
+import type { ProjectFile } from '@shared/types/project'
 
 interface MarkdownEditorProps {
   file: ProjectFile
@@ -67,44 +69,23 @@ function MarkdownEditor({ file }: MarkdownEditorProps): React.JSX.Element {
 
   return (
     <div className="flex h-full flex-col">
-      {/* Toolbar (F-031) */}
-      <div className="flex h-[35px] shrink-0 items-center gap-1 border-b border-neutral-700 bg-neutral-800 px-2">
-        <button
-          onClick={() => wrapSelection('**', '**')}
-          className="md-toolbar-btn font-bold"
-          title="Bold (wrap selection with **)"
-        >
+      <EditorToolbar>
+        <ToolbarButton onClick={() => wrapSelection('**', '**')} title="Bold (wrap selection with **)" className="font-bold">
           B
-        </button>
-        <button
-          onClick={() => wrapSelection('*', '*')}
-          className="md-toolbar-btn italic"
-          title="Italic (wrap selection with *)"
-        >
+        </ToolbarButton>
+        <ToolbarButton onClick={() => wrapSelection('*', '*')} title="Italic (wrap selection with *)" className="italic">
           I
-        </button>
-        <button
-          onClick={() => prefixLine('# ')}
-          className="md-toolbar-btn"
-          title="Heading (prefix line with #)"
-        >
+        </ToolbarButton>
+        <ToolbarButton onClick={() => prefixLine('# ')} title="Heading (prefix line with #)">
           H
-        </button>
-        <button
-          onClick={() => wrapSelection('[', '](url)')}
-          className="md-toolbar-btn"
-          title="Link (wrap selection as markdown link)"
-        >
+        </ToolbarButton>
+        <ToolbarButton onClick={() => wrapSelection('[', '](url)')} title="Link (wrap selection as markdown link)">
           Link
-        </button>
-        <button
-          onClick={() => prefixLine('- ')}
-          className="md-toolbar-btn"
-          title="List (prefix line with -)"
-        >
+        </ToolbarButton>
+        <ToolbarButton onClick={() => prefixLine('- ')} title="List (prefix line with -)">
           List
-        </button>
-      </div>
+        </ToolbarButton>
+      </EditorToolbar>
 
       {/* Editor + Preview */}
       <div className="min-h-0 flex-1">

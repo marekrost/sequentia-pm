@@ -1,4 +1,4 @@
-import type { ProjectFile } from '../../types/project'
+import type { ProjectFile } from '@shared/types/project'
 
 interface TabItemProps {
   file: ProjectFile

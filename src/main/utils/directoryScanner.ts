@@ -1,13 +1,6 @@
 import { readdir } from 'fs/promises'
 import { join } from 'path'
-
-export interface ProjectFile {
-  prefix: number
-  name: string
-  fileName: string
-  filePath: string
-  extension: 'md' | 'csv' | 'dbml'
-}
+import type { ProjectFile } from '@shared/types/project'
 
 const FILE_PATTERN = /^(\d+)-(.+)\.(md|csv|dbml)$/
 
