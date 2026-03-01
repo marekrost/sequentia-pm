@@ -1,0 +1,10 @@
+{
+    "mcpServers": {
+        "mcp-server-spreadsheet": {
+            "command": "uvx",
+            "args": [
+                "mcp-server-spreadsheet"
+            ]
+        }
+    }
+}
