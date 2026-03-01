@@ -1,0 +1,50 @@
+// Sequentia PM — Conceptual Data Model
+// These are not database tables but represent the domain objects
+// that flow through the application at runtime.
+
+Table project_directory {
+  path varchar [pk, note: 'Absolute path to the opened directory']
+  scanned_at timestamp [note: 'When the directory was last scanned']
+}
+
+Table project_file {
+  file_path varchar [pk, note: 'Absolute path to the file on disk']
+  directory_path varchar [ref: > project_directory.path]
+  prefix integer [not null, note: 'Numeric prefix extracted from filename (e.g. 02)']
+  name varchar [not null, note: 'Human-readable name derived from filename']
+  file_name varchar [not null, note: 'Original filename (e.g. 02-backlog.csv)']
+  extension varchar [not null, note: 'File extension: md, csv, or dbml']
+}
+
+Table editor_state {
+  file_path varchar [pk, ref: - project_file.file_path]
+  content text [note: 'Current buffer content in the editor']
+  saved_content text [note: 'Last saved content (for dirty detection)']
+  is_dirty boolean [not null, default: false]
+  is_loading boolean [not null, default: true]
+  error varchar [note: 'Error message if file load/save failed']
+}
+
+Table tab_bar {
+  active_index integer [not null, default: 0, note: 'Index of the currently active tab']
+}
+
+Table tab {
+  index integer [pk, note: 'Position in the tab bar (derived from prefix sort order)']
+  file_path varchar [ref: > project_file.file_path]
+  is_active boolean [not null, default: false]
+  is_dirty boolean [not null, default: false, note: 'Mirrors editor_state.is_dirty']
+}
+
+Table file_watcher {
+  directory_path varchar [pk, ref: - project_directory.path]
+  is_active boolean [not null, default: false]
+  write_lock_paths text [note: 'Set of file paths temporarily ignored after app writes']
+}
+
+Table csv_engine {
+  file_path varchar [pk, ref: - project_file.file_path]
+  headers text [not null, note: 'JSON array of column header strings']
+  row_count integer [not null]
+  hyperformula_sheet_id integer [note: 'HyperFormula internal sheet reference']
+}

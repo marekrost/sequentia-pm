@@ -1,0 +1,19 @@
+ID,Category,Requirement,Priority,Status,Source,Metric,Verification
+NF-001,Security,Context isolation enabled,1,Done,Design,contextIsolation: true in BrowserWindow,Code review of main process config
+NF-002,Security,Node integration disabled,1,Done,Design,nodeIntegration: false,Code review of main process config
+NF-003,Security,Sandbox enabled,1,Done,Design,sandbox: true in webPreferences,Code review of main process config
+NF-004,Security,No remote content,1,Done,Design,Zero network requests at runtime,Network monitor shows no outbound connections
+NF-005,Performance,Monaco bundle optimization,2,New,Design,Renderer bundle < 20MB,Build output size check
+NF-006,Performance,CSV grid virtualization,1,Done,Design,Smooth scrolling with 10k+ rows,Manual test with large CSV file
+NF-007,Performance,Debounced preview rendering,1,Done,Design,Preview updates within 200-400ms of typing pause,Manual interaction test
+NF-008,Reliability,CSV round-trip fidelity,1,Done,Design,Zero data loss on parse/unparse cycle,Test with edge-case CSV (commas in values and quoted fields)
+NF-009,Reliability,Graceful DBML parse errors,1,Done,Design,Last valid SVG preserved on syntax error,Type invalid DBML and verify preview retains last diagram
+NF-010,Reliability,Write-lock prevents echo,1,Done,Design,No reload loop after app saves,Save file and verify no double-reload
+NF-011,Compatibility,Cross-platform support,1,Done,Design,Runs on Linux/macOS/Windows,Build and test on each platform
+NF-012,Compatibility,Electron 33+,1,Done,Design,Uses current stable Electron,package.json version check
+NF-013,Build,Air-gapped asset bundling,1,Done,Design,All JS libraries bundled into app,Build with network disabled and verify app loads
+NF-014,Build,TypeScript strict mode,1,Done,Design,Zero type errors in strict mode,electron-vite build succeeds
+NF-015,Licensing,GPL-3.0 compliance,1,Done,Design,All dependencies compatible with GPLv3,License audit of dependency tree
+NF-016,UX,Dark theme consistency,2,New,Design,All editors use vs-dark / neutral-900 palette,Visual inspection of all editor types
+NF-017,Maintainability,Component isolation,1,Done,Design,Each editor is a self-contained component,No cross-editor state leakage
+NF-018,Maintainability,Zustand state management,1,Done,Design,Single store for project/tab/dirty state,Code review of store usage

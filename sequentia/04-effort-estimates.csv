@@ -1,0 +1,15 @@
+Module,Category,Min MD,Max MD,Notes
+Electron Shell,Core Shell,1,2,BrowserWindow setup; security config; lifecycle management
+IPC Layer,Core Shell,1,2,contextBridge API; file read/write/dialog handlers; type declarations
+Directory Scanner,Core Shell,0.5,1,Regex-based prefix parser; sorted file list; tab generation
+Tab Bar + Routing,Core Shell,1,1.5,TabBar/TabItem components; EditorRouter switch; Zustand store
+Monaco Wrapper,Markdown Editor,0.5,1,Air-gapped loader config; configurable language/theme; save action binding
+Markdown Editor,Markdown Editor,1,2,Split pane layout; live preview with marked; debounced rendering
+CSV Editor,CSV Editor,2,4,react-data-grid integration; papaparse round-trip; HyperFormula formula engine
+DBML Editor,DBML Editor,2,3,Custom Monarch tokenizer; dbml-renderer SVG; error-tolerant preview with zoom
+File Watching,File Management,1,2,chokidar service; write-lock echo prevention; IPC push events; dirty buffer handling
+Keyboard Shortcuts,Navigation,0.5,1,Ctrl+S save; Ctrl+Tab/Ctrl+Shift+Tab tab switching
+Tailwind Styling,UX,1,2,Dark theme; tab colors; editor layouts; welcome screen
+Build + Packaging,Build,0.5,1,electron-vite config; electron-builder config; production build verification
+,,,,
+TOTAL,,12,22.5,

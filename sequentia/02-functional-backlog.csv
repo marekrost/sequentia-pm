@@ -1,0 +1,36 @@
+ID,Category,Requirement,Priority,Status,Source,Detail
+F-001,Core Shell,Electron application shell,1,Done,Design,BrowserWindow with security best practices (context isolation; sandbox; no node integration)
+F-002,Core Shell,Directory picker,1,Done,Design,Native OS dialog to select a project directory
+F-003,Core Shell,Directory scanner,1,Done,Design,Scan directory for files matching pattern NN-name.ext where ext is md/csv/dbml
+F-004,Core Shell,Tab bar generation,1,Done,Design,Generate tabs sorted by numeric prefix with extension color indicators
+F-005,Core Shell,Extension-based editor routing,1,Done,Design,Route each tab to the correct editor component based on file extension
+F-006,Core Shell,File read/write via IPC,1,Done,Design,Secure file operations through contextBridge preload API
+F-007,Markdown Editor,Monaco Editor integration,1,Done,Design,VS Code-like editing with markdown syntax highlighting
+F-008,Markdown Editor,Live preview split pane,1,Done,Design,Side-by-side editor (left) and rendered HTML preview (right)
+F-009,Markdown Editor,Resizable split pane,1,Done,Design,Draggable divider between editor and preview panels
+F-010,CSV Editor,Spreadsheet grid display,1,Done,Design,Display CSV data in an editable grid with column headers from first row
+F-011,CSV Editor,Cell editing,1,Done,Design,Click-to-edit cells with value persistence
+F-012,CSV Editor,Formula evaluation,1,Done,Design,Cells starting with = are evaluated by HyperFormula engine
+F-013,CSV Editor,CSV round-trip fidelity,1,Done,Design,Parse and serialize CSV via papaparse preserving quoting and special characters
+F-014,DBML Editor,DBML syntax highlighting,1,Done,Design,Custom Monaco Monarch tokenizer for DBML keywords/types/strings/comments
+F-015,DBML Editor,Live SVG ERD rendering,1,Done,Design,Real-time entity-relationship diagram rendered from DBML source
+F-016,DBML Editor,Zoom controls,1,Done,Design,Zoom in/out/reset controls for the SVG preview panel
+F-017,DBML Editor,Error tolerance,1,Done,Design,Show last valid SVG on parse error with error message overlay
+F-018,File Management,Dirty file tracking,1,Done,Design,Visual indicator (*) on tabs with unsaved changes
+F-019,File Management,Ctrl+S save,1,Done,Design,Save active editor content to disk via keyboard shortcut
+F-020,File Management,File watching,1,Done,Design,Detect external file changes via chokidar and reload clean buffers
+F-021,File Management,Write-lock echo prevention,1,Done,Design,Ignore chokidar events for 1s after app writes to prevent feedback loops
+F-022,Navigation,Tab switching shortcuts,1,Done,Design,Ctrl+Tab and Ctrl+Shift+Tab to cycle through tabs
+F-023,Navigation,Tab click navigation,1,Done,Design,Click tab to switch active editor
+F-024,UX,Air-gapped Monaco loader,1,Done,Design,Monaco loads from local bundle not CDN
+F-025,UX,Dark theme,1,Done,Design,Dark neutral color scheme for IDE-like appearance
+F-026,UX,Welcome screen,1,Done,Design,Landing screen with project directory picker when no project is open
+F-027,Core Shell,Recent projects list,2,New,Roadmap,Remember and display recently opened project directories
+F-028,CSV Editor,Add/delete rows,2,New,Roadmap,Insert and remove rows from the spreadsheet grid
+F-029,CSV Editor,Add/delete columns,2,New,Roadmap,Insert and remove columns with header editing
+F-030,CSV Editor,Column sorting,2,New,Roadmap,Click column header to sort rows ascending/descending
+F-031,Markdown Editor,Markdown toolbar,2,New,Roadmap,Toolbar buttons for bold/italic/heading/link/list formatting
+F-032,File Management,Auto-save,3,Wish,Roadmap,Optionally auto-save after a configurable debounce period
+F-033,DBML Editor,Pan and drag,3,Wish,Roadmap,Click-and-drag panning of the SVG diagram
+F-034,Export,PDF export,3,Wish,Roadmap,Export rendered markdown or DBML diagrams to PDF
+F-035,Core Shell,Custom title bar,3,Wish,Roadmap,Frameless window with custom minimize/maximize/close controls

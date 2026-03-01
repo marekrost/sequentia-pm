@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* CSV grid: row-number gutter matches header background */
+.rdg-rownum {
+  background-color: var(--rdg-header-background-color) !important;
+}
+
+/* CSV grid: uniform cell padding */
+.rdg-cell {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+/* CSV grid: alternating row colors */
+.rdg-row:nth-child(odd) .rdg-cell {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.rdg-row:nth-child(odd) .rdg-rownum {
+  background-color: color-mix(in srgb, var(--rdg-header-background-color), rgba(255, 255, 255, 0.1)) !important;
+}
+
+/* CSV grid: hover highlight for all rows */
+.rdg-row:hover .rdg-cell {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.rdg-row:hover .rdg-rownum {
+  background-color: color-mix(in srgb, var(--rdg-header-background-color), rgba(255, 255, 255, 0.15)) !important;
+}

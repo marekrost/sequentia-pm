@@ -1,0 +1,26 @@
+ID,Task,Phase,Status,Estimate MD,Dependencies,Definition of Done
+T-001,Set up Electron + React + TypeScript + Tailwind scaffold,Phase 0,Done,1,,electron-vite build succeeds; window opens with styled content
+T-002,Create BrowserWindow with security best practices,Phase 0,Done,0.5,T-001,contextIsolation/sandbox/nodeIntegration configured correctly
+T-003,Implement directory scanner with prefix regex,Phase 1,Done,0.5,T-002,scanDirectory returns sorted ProjectFile[] for test directory
+T-004,Implement IPC handlers for file operations,Phase 1,Done,1,T-002,file:read/file:write/dir:scan/dialog:openDirectory all functional
+T-005,Create contextBridge preload API,Phase 1,Done,0.5,T-004,window.api exposes all IPC methods with correct types
+T-006,Build WelcomeScreen with directory picker,Phase 1,Done,0.5,T-005,Click button opens native dialog; selecting directory triggers scan
+T-007,Build TabBar and TabItem components,Phase 1,Done,1,T-003,Tabs render in prefix order with extension color dots
+T-008,Build EditorRouter with extension switching,Phase 1,Done,0.5,T-007,Clicking tabs routes to correct editor placeholder
+T-009,Create Zustand project store,Phase 1,Done,0.5,T-005,Store manages projectPath/files/activeTab/dirtyFiles
+T-010,Configure Monaco with air-gapped local loader,Phase 2,Done,0.5,T-001,Monaco loads without network; no CDN requests
+T-011,Build MonacoWrapper component,Phase 2,Done,0.5,T-010,Reusable editor with configurable language/theme/onChange/onSave
+T-012,Build MarkdownEditor with split pane,Phase 2,Done,1,T-011,Monaco left + HTML preview right; resizable divider
+T-013,Build MarkdownPreview with debounced rendering,Phase 2,Done,0.5,T-012,Preview updates 200ms after typing stops
+T-014,Implement useFileContent hook,Phase 2,Done,1,T-005,Load/save/dirty tracking works for all editor types
+T-015,Implement csvParser with papaparse,Phase 3,Done,0.5,T-001,Parse and unparse CSV with quoting fidelity
+T-016,Build CsvEditor with react-data-grid,Phase 3,Done,1.5,T-015,Grid renders headers/rows; cells editable; changes persist
+T-017,Integrate HyperFormula engine,Phase 3,Done,1,T-016,Cells with = prefix evaluate formulas; computed values display
+T-018,Register DBML Monarch tokenizer,Phase 4,Done,0.5,T-010,DBML keywords/types/strings/comments highlighted correctly
+T-019,Build DbmlEditor with split pane,Phase 4,Done,1,T-018,Monaco left + SVG preview right
+T-020,Build DbmlPreview with zoom controls,Phase 4,Done,1,T-019,SVG renders from DBML; zoom +/-/reset; error overlay on parse failure
+T-021,Implement chokidar WatcherService,Phase 5,Done,1,T-004,Watches project dir; sends IPC events on change/add/unlink
+T-022,Implement write-lock echo prevention,Phase 5,Done,0.5,T-021,App writes ignored by watcher for 1s
+T-023,Add external change reload to useFileContent,Phase 5,Done,0.5,T-021,Clean buffers reload on external change; dirty buffers preserved
+T-024,Add Ctrl+Tab / Ctrl+Shift+Tab tab switching,Phase 5,Done,0.5,T-008,Tab navigation wraps around correctly
+T-025,Update README with correct license,Phase 5,Done,0.25,,README shows GPLv3 for HyperFormula

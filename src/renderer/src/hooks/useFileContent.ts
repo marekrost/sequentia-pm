@@ -1,0 +1,85 @@
+import { useEffect, useState, useCallback } from 'react'
+import { useProjectStore } from '../stores/projectStore'
+
+interface UseFileContentReturn {
+  content: string | null
+  loading: boolean
+  error: string | null
+  setContent: (value: string) => void
+  save: () => Promise<void>
+}
+
+export function useFileContent(filePath: string): UseFileContentReturn {
+  const [content, setContent] = useState<string | null>(null)
+  const [savedContent, setSavedContent] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const markDirty = useProjectStore((s) => s.markDirty)
+  const markClean = useProjectStore((s) => s.markClean)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError(null)
+
+    window.api
+      .readFile(filePath)
+      .then((text) => {
+        if (!cancelled) {
+          setContent(text)
+          setSavedContent(text)
+          setLoading(false)
+          markClean(filePath)
+        }
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(String(err))
+          setLoading(false)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [filePath, markClean])
+
+  const handleSetContent = useCallback(
+    (value: string) => {
+      setContent(value)
+      if (value !== savedContent) {
+        markDirty(filePath)
+      } else {
+        markClean(filePath)
+      }
+    },
+    [filePath, savedContent, markDirty, markClean]
+  )
+
+  // Listen for external file changes
+  useEffect(() => {
+    const unsub = window.api.onFileChanged((changedPath) => {
+      if (changedPath !== filePath) return
+      const isDirty = content !== savedContent
+      if (isDirty) return // don't clobber unsaved changes
+      window.api.readFile(filePath).then((text) => {
+        setContent(text)
+        setSavedContent(text)
+      })
+    })
+    return unsub
+  }, [filePath, content, savedContent])
+
+  const save = useCallback(async () => {
+    if (content === null) return
+    try {
+      await window.api.writeFile(filePath, content)
+      setSavedContent(content)
+      markClean(filePath)
+    } catch (err) {
+      setError(String(err))
+    }
+  }, [content, filePath, markClean])
+
+  return { content, loading, error, setContent: handleSetContent, save }
+}
