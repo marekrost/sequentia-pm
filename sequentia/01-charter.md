@@ -1,9 +1,11 @@
 # Sequentia PM — Project charter
 
 ## Overview
+
 Sequentia Project Manager (Sequentia PM) is a local-first, air-gapped, file-driven interface. It transforms a project directory into a unified dashboard by scanning for prefix-numbered files and rendering them as tabs with purpose-built, embedded editors.
 
 ## Core Philosophy
+
 Instead of fragmented SaaS tools, Sequentia centralizes project state within a structured sequence of local files. The application acts as a high-performance router, mapping file extensions to specialized editors (e.g., Markdown, CSV, DBML).
 
 ## Technical Design

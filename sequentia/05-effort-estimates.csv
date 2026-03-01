@@ -12,4 +12,4 @@ Keyboard Shortcuts,Navigation,0.5,1,Ctrl+S save; Ctrl+Tab/Ctrl+Shift+Tab tab swi
 Tailwind Styling,UX,1,2,Dark theme; tab colors; editor layouts; welcome screen
 Build + Packaging,Build,0.5,1,electron-vite config; electron-builder config; production build verification
 ,,,,
-TOTAL,,12,22.5,
+TOTAL,,=SUM(C1:C12),=SUM(D1:D12),

@@ -46,6 +46,60 @@ function colIndexToLetter(index: number): string {
   return result
 }
 
+function EditableHeader({
+  letter,
+  name,
+  onRename
+}: {
+  letter: string
+  name: string
+  onRename: (newName: string) => void
+}): React.JSX.Element {
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState(name)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (editing) inputRef.current?.select()
+  }, [editing])
+
+  const commit = (): void => {
+    setEditing(false)
+    const trimmed = draft.trim()
+    if (trimmed && trimmed !== name) onRename(trimmed)
+    else setDraft(name)
+  }
+
+  if (editing) {
+    return (
+      <div className="flex flex-col items-start leading-tight">
+        <span className="text-[10px] text-neutral-500">{letter}</span>
+        <input
+          ref={inputRef}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={commit}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') commit()
+            if (e.key === 'Escape') {
+              setDraft(name)
+              setEditing(false)
+            }
+          }}
+          className="w-full bg-neutral-700 px-0.5 text-xs text-neutral-200 outline-none"
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col items-start leading-tight" onDoubleClick={() => setEditing(true)}>
+      <span className="text-[10px] text-neutral-500">{letter}</span>
+      <span className="text-xs">{name}</span>
+    </div>
+  )
+}
+
 function colKeyToIndex(key: string): number | null {
   const m = key.match(/^col_(\d+)$/)
   return m ? Number(m[1]) : null
@@ -59,6 +113,9 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
   const [cellRange, setCellRange] = useState<CellRange | null>(null)
   const [shiftHeld, setShiftHeld] = useState(false)
   const gridRef = useRef<HTMLDivElement>(null)
+  const renameHeaderRef = useRef<(colIndex: number, newName: string) => void>(() => {})
+  const isDragging = useRef(false)
+  const dragAnchor = useRef<{ row: number; col: number } | null>(null)
 
   // Keep a ref to csvData for use in event handlers that shouldn't re-register
   const csvDataRef = useRef(csvData)
@@ -92,17 +149,70 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
     }
   }, [content])
 
-  // --- Cell range selection ---
+  // --- Cell range selection (click + drag) ---
 
-  // Prevent native text selection on Shift+Click (fires before onClick)
   const handleCellMouseDown = useCallback(
-    (_args: unknown, event: React.MouseEvent) => {
-      if (event.shiftKey) {
-        event.preventDefault()
+    (
+      args: { column: { key: string }; rowIdx: number },
+      event: React.MouseEvent
+    ) => {
+      event.preventDefault() // prevent text selection during drag
+      const colIdx = colKeyToIndex(args.column.key)
+      if (colIdx === null) return
+
+      if (event.shiftKey && cellRange) {
+        setCellRange({ ...cellRange, endRow: args.rowIdx, endCol: colIdx })
+      } else {
+        dragAnchor.current = { row: args.rowIdx, col: colIdx }
+        isDragging.current = true
+        setCellRange({
+          startRow: args.rowIdx,
+          startCol: colIdx,
+          endRow: args.rowIdx,
+          endCol: colIdx
+        })
       }
     },
-    []
+    [cellRange]
   )
+
+  // Resolve cell under cursor from DOM aria attributes
+  const cellFromPoint = useCallback((clientX: number, clientY: number) => {
+    const el = document.elementFromPoint(clientX, clientY)
+    if (!el) return null
+    const cell = el.closest<HTMLElement>('[aria-colindex]')
+    const row = el.closest<HTMLElement>('[aria-rowindex]')
+    if (!cell || !row) return null
+    const colIdx = Number(cell.getAttribute('aria-colindex')) - 2 // offset for _rownum column
+    const rowIdx = Number(row.getAttribute('aria-rowindex')) - 2 // offset for header row
+    if (colIdx < 0 || rowIdx < 0) return null
+    return { row: rowIdx, col: colIdx }
+  }, [])
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent): void => {
+      if (!isDragging.current || !dragAnchor.current) return
+      const pos = cellFromPoint(e.clientX, e.clientY)
+      if (!pos) return
+      setCellRange({
+        startRow: dragAnchor.current.row,
+        startCol: dragAnchor.current.col,
+        endRow: pos.row,
+        endCol: pos.col
+      })
+    }
+
+    const handleMouseUp = (): void => {
+      isDragging.current = false
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+  }, [cellFromPoint])
 
   const handleCellClick = useCallback(
     (
@@ -111,6 +221,12 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
     ) => {
       const colIdx = colKeyToIndex(args.column.key)
       if (colIdx === null) return
+
+      // If we just finished a drag, the range is already set — skip
+      if (dragAnchor.current) {
+        dragAnchor.current = null
+        return
+      }
 
       if (event.shiftKey && cellRange) {
         setCellRange({ ...cellRange, endRow: args.rowIdx, endCol: colIdx })
@@ -150,8 +266,6 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
 
     const norm = cellRange ? normalizeRange(cellRange) : null
 
-    const hf = hfRef.current
-
     const dataColumns: Column<Row>[] = csvData.headers.map((header, i) => ({
       key: `col_${i}`,
       name: header,
@@ -159,14 +273,16 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
       editable: true,
       sortable: true,
       renderHeaderCell: () => (
-        <div className="flex flex-col items-start leading-tight">
-          <span className="text-[10px] text-neutral-500">{colIndexToLetter(i)}</span>
-          <span className="text-xs">{header}</span>
-        </div>
+        <EditableHeader
+          letter={colIndexToLetter(i)}
+          name={header}
+          onRename={(newName) => renameHeaderRef.current(i, newName)}
+        />
       ),
       renderEditCell: renderTextEditor,
       renderCell: ({ row }: { row: Row }) => {
         const raw = row[`col_${i}`] ?? ''
+        const hf = hfRef.current
         if (hf && raw.startsWith('=')) {
           const val = hf.getCellValue({ sheet: 0, row: Number(row._rowIdx), col: i })
           return <>{val != null ? String(val) : raw}</>
@@ -175,10 +291,12 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
       },
       minWidth: 80,
       cellClass: norm && i >= norm.minCol && i <= norm.maxCol
-        ? (_row: Row, rowIdx: number): string | undefined =>
-            rowIdx >= norm.minRow && rowIdx <= norm.maxRow
+        ? (row: Row): string | undefined => {
+            const rowIdx = Number(row._rowIdx)
+            return rowIdx >= norm.minRow && rowIdx <= norm.maxRow
               ? 'rdg-cell-selected'
               : undefined
+          }
         : undefined
     }))
 
@@ -252,6 +370,16 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
     },
     [setContent]
   )
+
+  const handleRenameHeader = useCallback(
+    (colIndex: number, newName: string) => {
+      if (!csvData) return
+      const newHeaders = csvData.headers.map((h, i) => (i === colIndex ? newName : h))
+      syncToContent({ headers: newHeaders, rows: csvData.rows })
+    },
+    [csvData, syncToContent]
+  )
+  renameHeaderRef.current = handleRenameHeader
 
   const handleRowsChange = useCallback(
     (newRows: Row[], { indexes }: { indexes: number[] }) => {
@@ -371,10 +499,7 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
 
   const handleDeleteRow = useCallback(() => {
     if (!csvData) return
-    if (!cellRange) {
-      alert('No cells selected. Select cells in the rows you want to delete.')
-      return
-    }
+    if (!cellRange) return
     const { minRow, maxRow } = normalizeRange(cellRange)
     const newRows = csvData.rows.filter((_, i) => i < minRow || i > maxRow)
     setCellRange(null)
@@ -384,9 +509,7 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
   // --- Column operations (F-029) ---
   const handleAddColumn = useCallback(() => {
     if (!csvData) return
-    const name = prompt('Column name:')
-    if (name === null) return
-    const header = name.trim() || `Column ${csvData.headers.length + 1}`
+    const header = `Column ${csvData.headers.length + 1}`
     const insertAfter = cellRange ? normalizeRange(cellRange).maxCol : csvData.headers.length - 1
     const newHeaders = [
       ...csvData.headers.slice(0, insertAfter + 1),
@@ -403,10 +526,7 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
 
   const handleDeleteColumn = useCallback(() => {
     if (!csvData) return
-    if (!cellRange) {
-      alert('No cells selected. Select cells in the columns you want to delete.')
-      return
-    }
+    if (!cellRange) return
     const { minCol, maxCol } = normalizeRange(cellRange)
     const keep = (_: unknown, i: number): boolean => i < minCol || i > maxCol
     setCellRange(null)
@@ -453,12 +573,12 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
       return 'Click a cell to extend selection to a range'
     }
     if (isMulti) {
-      return 'Ctrl+C to copy range \u00b7 Ctrl+V to paste \u00b7 Click to start new selection \u00b7 Hold Shift to extend'
+      return 'Ctrl+C to copy range \u00b7 Ctrl+V to paste \u00b7 Click to start new selection'
     }
     if (cellRange) {
-      return 'Click to navigate \u00b7 Hold Shift and click to select a range \u00b7 Double-click to edit'
+      return 'Click to navigate \u00b7 Drag or Shift+click to select a range \u00b7 Double-click to edit'
     }
-    return 'Click a cell to select \u00b7 Click a column header to sort'
+    return 'Click a cell to select \u00b7 Drag to select a range \u00b7 Click a column header to sort'
   }, [cellRange, shiftHeld])
 
   // Keyboard save handler
@@ -520,7 +640,7 @@ function CsvEditor({ file }: CsvEditorProps): React.JSX.Element {
       {/* Grid */}
       <div
         ref={gridRef}
-        className="min-h-0 flex-1 [&_.rdg]:h-full [&_.rdg]:border-none [&_.rdg]:bg-neutral-900"
+        className="min-h-0 flex-1 select-none [&_.rdg]:h-full [&_.rdg]:border-none [&_.rdg]:bg-neutral-900"
       >
         <DataGrid
           columns={columns}
