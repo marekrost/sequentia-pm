@@ -29,4 +29,4 @@ Instead of fragmented SaaS tools, Sequentia centralizes project state within a s
 
 ## File Organization
 
-Files are prefix-numbered (`00` to `08`) to control tab ordering. The filename after the prefix becomes the tab label. All files are plain text and remain readable without the application.
+Files are prefix-numbered (`00` to `10`) to control tab ordering. The filename after the prefix becomes the tab label. All files are plain text and remain readable without the application.

@@ -1,0 +1,27 @@
+Component,Version,License,Scope,Copyleft,Note
+hyperformula,2.7.1,GPL-3.0-only,Runtime,Yes,Formula engine for CSV editor. Imposes GPL-3.0 on the entire project.
+electron,33.4.11,MIT,Dev,No,Application shell. Not bundled as a dependency — ships as runtime.
+react,19.2.4,MIT,Runtime,No,UI framework.
+react-dom,19.2.4,MIT,Runtime,No,React DOM renderer.
+monaco-editor,0.52.2,MIT,Runtime,No,Code editor component.
+@monaco-editor/react,4.7.0,MIT,Runtime,No,React bindings for Monaco.
+@softwaretechnik/dbml-renderer,1.0.31,ISC,Runtime,No,DBML to SVG rendering.
+chokidar,4.0.3,MIT,Runtime,No,File system watcher.
+marked,15.0.12,MIT,Runtime,No,Markdown to HTML parser.
+papaparse,5.5.3,MIT,Runtime,No,CSV parser and serializer.
+react-data-grid,7.0.0-beta.59,MIT,Runtime,No,Spreadsheet grid component.
+react-resizable-panels,2.1.9,MIT,Runtime,No,Resizable split pane layout.
+zustand,5.0.11,MIT,Runtime,No,State management.
+@tailwindcss/typography,0.5.19,MIT,Runtime,No,Prose styling plugin.
+tailwindcss,4.2.1,MIT,Dev,No,CSS framework.
+@tailwindcss/vite,4.2.1,MIT,Dev,No,Vite integration for Tailwind.
+@vitejs/plugin-react,4.7.0,MIT,Dev,No,Vite React plugin.
+electron-vite,3.1.0,MIT,Dev,No,Vite-based Electron build tooling.
+electron-builder,25.1.8,MIT,Dev,No,Electron packaging and distribution.
+typescript,5.9.3,Apache-2.0,Dev,No,Type system and compiler.
+vite-plugin-monaco-editor,1.1.0,MIT,Dev,No,Monaco bundling for Vite.
+@types/papaparse,5.5.2,MIT,Dev,No,TypeScript type definitions.
+@types/react,19.2.14,MIT,Dev,No,TypeScript type definitions.
+@types/react-dom,19.2.3,MIT,Dev,No,TypeScript type definitions.
+,,,,,"---"
+,,,,,"CONCLUSION: HyperFormula (GPL-3.0-only) is the most restrictive license in the dependency tree. All other components are MIT/ISC/Apache-2.0 (permissive). The project must be licensed under GPL-3.0 or a compatible copyleft license."

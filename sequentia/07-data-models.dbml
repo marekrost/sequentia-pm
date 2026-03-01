@@ -1,6 +1,7 @@
 // Sequentia PM — Conceptual Data Model
-// These are not database tables but represent the domain objects
-// that flow through the application at runtime.
+// Sequentia does not require a database. The project management folder serves
+// as a source of project truth. These are not database tables but represent
+// the domain objects that flow through the application at the runtime.
 
 Table project_directory {
   path varchar [pk, note: 'Absolute path to the opened directory']
@@ -12,7 +13,7 @@ Table project_file {
   directory_path varchar [ref: > project_directory.path]
   prefix integer [not null, note: 'Numeric prefix extracted from filename (e.g. 02)']
   name varchar [not null, note: 'Human-readable name derived from filename']
-  file_name varchar [not null, note: 'Original filename (e.g. 02-backlog.csv)']
+  file_name varchar [not null, note: 'Original filename (e.g. 03-backlog.csv)']
   extension varchar [not null, note: 'File extension: md, csv, or dbml']
 }
 
