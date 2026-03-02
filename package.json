@@ -2,8 +2,29 @@
   "name": "sequentia-pm",
   "version": "0.1.0",
   "description": "Local-first, air-gapped, file-driven project management interface",
+  "author": "Marek Rost <marek.rost@gmail.com>",
   "license": "GPL-3.0-only",
   "main": "./out/main/index.js",
+  "build": {
+    "appId": "com.sequentia.pm",
+    "productName": "Sequentia PM",
+    "directories": {
+      "buildResources": "resources"
+    },
+    "linux": {
+      "icon": "resources/icon.png",
+      "target": ["AppImage", "deb", "flatpak"],
+      "desktop": {
+        "Name": "Sequentia PM",
+        "Comment": "Local-first, air-gapped, file-driven project management interface",
+        "Categories": "Office;ProjectManagement"
+      }
+    },
+    "flatpak": {
+      "runtimeVersion": "24.08",
+      "baseVersion": "24.08"
+    }
+  },
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",

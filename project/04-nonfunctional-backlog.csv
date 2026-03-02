@@ -1,0 +1,16 @@
+ID,Category,Requirement,Priority,Status,Source,Metric,Verification
+NF-001,Security,Renderer process isolation,1,Done,Design,Renderer has no direct access to Node APIs or filesystem; all privileged operations go through an explicit IPC boundary,Code review of main process and preload configuration
+NF-002,Security,No remote content,1,Done,Design,Zero network requests at runtime,Network monitor shows no outbound connections
+NF-003,Performance,Editor bundle optimization,2,New,Design,Renderer bundle < 20MB,Build output size check
+NF-004,Performance,CSV grid virtualization,1,Done,Design,Smooth scrolling with 10k+ rows,Manual test with large CSV file
+NF-005,Performance,Debounced preview rendering,1,Done,Design,Preview updates within 200-400ms of typing pause,Manual interaction test
+NF-006,Reliability,CSV round-trip fidelity,1,Done,Design,Zero data loss on parse/unparse cycle,Test with edge-case CSV (commas in values and quoted fields)
+NF-007,Reliability,Graceful DBML parse errors,1,Done,Design,Last valid SVG preserved on syntax error,Type invalid DBML and verify preview retains last diagram
+NF-008,Reliability,Write-lock prevents echo,1,Done,Design,No reload loop after app saves,Save file and verify no double-reload
+NF-009,Compatibility,Cross-platform support,1,Done,Design,Runs on Linux/macOS/Windows,Build and test on each platform
+NF-010,Compatibility,Current stable runtime,1,Done,Design,Application runs on the current stable version of its desktop runtime,package.json version check
+NF-011,Build,Air-gapped asset bundling,1,Done,Design,All JS libraries bundled into app,Build with network disabled and verify app loads
+NF-012,Build,Strict type checking,1,Done,Design,Zero type errors in strict mode,Build succeeds with strict compiler settings
+NF-013,Licensing,GPL-3.0 compliance,1,Done,Design,All dependencies compatible with GPLv3,License audit of dependency tree
+NF-014,UX,Dark theme consistency,2,New,Design,All editors use a consistent dark colour palette,Visual inspection of all editor types
+NF-015,Maintainability,Component isolation,1,Done,Design,Each editor is a self-contained component with no cross-editor state leakage,Code review of component boundaries and shared state surface

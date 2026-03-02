@@ -1,0 +1,7 @@
+Phase,Start,End,Duration,Tasks,Dependencies,Status
+Phase 0: Scaffolding,2026-02-26,2026-02-28,2d,T-001 T-002,,Done
+Phase 1: Directory Scanner + Tabs,2026-02-28,2026-03-01,1d,T-003 T-004 T-005 T-006 T-007 T-008 T-009,Phase 0,Done
+Phase 2: Markdown Editor,2026-03-01,2026-03-02,1d,T-010 T-011 T-012 T-013 T-014,Phase 1,Done
+Phase 3: CSV Editor,2026-03-01,2026-03-03,2d,T-015 T-016 T-017,Phase 1,Done
+Phase 4: DBML Editor,2026-03-01,2026-03-04,3d,T-018 T-019 T-020,Phase 1,Done
+Phase 5: File Watching + Polish,2026-03-04,2026-03-05,1d,T-021 T-022 T-023 T-024 T-025 T-030 T-031 T-032 T-033 T-034,Phase 2 Phase 3 Phase 4,Done

@@ -7,7 +7,7 @@ export function buildAppMenu(mainWindow: BrowserWindow): void {
   const recentSubmenu: Electron.MenuItemConstructorOptions[] =
     recentProjects.length > 0
       ? recentProjects.map((projectPath) => ({
-          label: projectPath.split('/').pop() || projectPath,
+          label: projectPath.split('/').slice(-2).join('/') || projectPath,
           toolTip: projectPath,
           click: () => mainWindow.webContents.send('menu:open-recent', projectPath)
         }))

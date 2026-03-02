@@ -1,7 +1,13 @@
-import { app, BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, nativeTheme, shell } from 'electron'
 import { join } from 'path'
 import { registerIpcHandlers } from './ipc/handlers'
 import { buildAppMenu } from './menu'
+
+// Force dark theme for native UI (menubar, dialogs) on Linux/Flatpak
+if (process.platform === 'linux') {
+  process.env['GTK_THEME'] = 'Adwaita:dark'
+}
+nativeTheme.themeSource = 'dark'
 
 const isDev = !app.isPackaged
 
@@ -12,6 +18,7 @@ function createWindow(): BrowserWindow {
     minWidth: 800,
     minHeight: 600,
     show: false,
+    backgroundColor: '#171717',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: true,

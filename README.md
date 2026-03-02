@@ -43,8 +43,37 @@ Compiles the app to the `out/` directory. To package a distributable:
 npx electron-builder
 ```
 
-The packaged app is fully air-gapped — all assets are bundled with no CDN dependencies.
+This builds all configured Linux targets. To build a specific one:
 
-## License
+```bash
+npx electron-builder --linux AppImage
+npx electron-builder --linux deb
+npx electron-builder --linux flatpak
+```
 
-GPL-3.0 — see [LICENSE](LICENSE) for details.
+| Target | Notes |
+|--------|-------|
+| AppImage | Portable, no installation needed |
+| deb | Debian/Ubuntu package |
+| flatpak | Sandboxed — requires `flatpak-builder` and the Freedesktop runtime |
+
+### Building flatpak
+
+For flatpak, install the build dependencies first:
+
+```bash
+sudo apt install flatpak-builder
+flatpak install org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08 org.electronjs.Electron2.BaseApp//24.08
+```
+
+To build the flatpak file run:
+
+```bash
+npx electron-builder --linux flatpak
+```
+
+To install the finished package run:
+
+```bash
+flatpak install --user --bundle 'dist/Sequentia PM-0.1.0-x86_64.flatpak'
+```

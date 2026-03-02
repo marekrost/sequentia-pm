@@ -1,20 +1,4 @@
-# Sequentia PM — PM properties and principles
-
-## Key properties
-
-| Property | Value |
-|----------|-------|
-| Name | Sequentia Project Manager |
-| Business owner (customer) | Marek Rost |
-| Business language | English |
-| Developer | Marek Rost |
-| Developer team size | 1 |
-| Development language | English |
-| Platform | Electron (cross-platform desktop) |
-| License | GPL-3.0 |
-| Repository | sequentia-pm |
-
-## Principles
+# Sequentia PM — Design principles
 
 ### P-001: Privacy by design
 All data stays on the local machine. The application is fully air-gapped — no telemetry, no CDN fetches, no network calls of any kind. All JS libraries are bundled into the Electron app at build time.

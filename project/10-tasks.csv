@@ -24,3 +24,12 @@ T-022,Implement write-lock echo prevention,Phase 5,Done,0.5,T-021,App writes ign
 T-023,Add external change reload to useFileContent,Phase 5,Done,0.5,T-021,Clean buffers reload on external change; dirty buffers preserved
 T-024,Add Ctrl+Tab / Ctrl+Shift+Tab tab switching,Phase 5,Done,0.5,T-008,Tab navigation wraps around correctly
 T-025,Update README with correct license,Phase 5,Done,0.25,,README shows GPLv3 for HyperFormula
+T-026,Show unprefixed files at end of tab bar,Phase 6,New,0.5,T-003,Files with supported extension but missing/unreadable prefix appear after all prefixed tabs
+T-027,Show unsupported-format notice for unknown extensions,Phase 6,New,0.5,T-008,Switching to a tab with unsupported extension displays a notice instead of an editor
+T-028,Sort unprefixed unsupported files at very end of tabs,Phase 6,New,0.25,T-026 T-027,Files that are both unsupported and unprefixed appear after all other tabs
+T-029,Prompt user on external change to dirty buffer,Phase 6,New,0.5,T-023,When an external change is detected on a file with unsaved edits a dialog asks the user to reload or keep local version
+T-030,Implement recent projects list,Phase 5,Done,0.5,T-006,Welcome screen shows recently opened directories; selecting one re-opens the project
+T-031,Add row insert/delete to CSV editor,Phase 5,Done,0.5,T-016,User can insert and remove rows from the spreadsheet grid
+T-032,Add column insert/delete to CSV editor,Phase 5,Done,0.5,T-016,User can insert and remove columns with header editing
+T-033,Add column sorting to CSV editor,Phase 5,Done,0.5,T-016,Clicking a column header sorts rows ascending/descending
+T-034,Add markdown formatting toolbar,Phase 5,Done,0.5,T-012,Toolbar buttons for bold/italic/heading/link/list formatting

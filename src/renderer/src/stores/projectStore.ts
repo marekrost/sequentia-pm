@@ -23,11 +23,13 @@ export const useProjectStore = create<ProjectState>((set) => ({
   openProject: async (path: string) => {
     const files = await window.api.scanDirectory(path)
     set({ projectPath: path, files, activeTabIndex: 0, dirtyFiles: new Set() })
+    document.title = `Sequentia PM - ${path.split('/').slice(-2).join('/')}`
     window.api.addRecentProject(path)
   },
 
   closeProject: () => {
     set({ projectPath: null, files: [], activeTabIndex: 0, dirtyFiles: new Set() })
+    document.title = 'Sequentia PM'
   },
 
   setActiveTab: (index: number) => {

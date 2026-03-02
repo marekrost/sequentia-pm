@@ -43,7 +43,7 @@ function WelcomeScreen(): React.JSX.Element {
                     className="w-full rounded px-4 py-2 text-left text-sm text-neutral-300 transition-colors hover:bg-neutral-800"
                     title={path}
                   >
-                    {path.split('/').pop() || path}
+                    {path.split('/').slice(-2).join('/') || path}
                     <span className="ml-2 text-xs text-neutral-500">{path}</span>
                   </button>
                 </li>

@@ -15,12 +15,13 @@ A new project management template can be reconstructed from this document alone 
 | 02 | principles | md | Design constraints and non-negotiable rules |
 | 03 | functional-backlog | csv | What the system does (features) |
 | 04 | nonfunctional-backlog | csv | How well the system does it (quality attributes) |
-| 05 | effort-estimates | csv | How much work each module costs |
-| 06 | scenarios | md | How users interact with the system |
-| 07 | data-models | dbml | The domain structure |
-| 08 | licensing | csv | Third-party components and their license obligations |
-| 09 | tasks | csv | The work breakdown |
-| 10 | schedule | csv | When the work happens |
+| 05 | technical-profile | md | Technology stack and repository / module architecture |
+| 06 | effort-estimates | csv | How much work each module costs |
+| 07 | scenarios | md | How users interact with the system |
+| 08 | data-models | dbml | The domain structure |
+| 09 | licensing | csv | Third-party components and their license obligations |
+| 10 | tasks | csv | The work breakdown |
+| 11 | schedule | csv | When the work happens |
 
 ## File structures
 
@@ -28,19 +29,15 @@ A new project management template can be reconstructed from this document alone 
 
 Markdown document with the following sections:
 
+- **Key properties** — table of project metadata (name, owner, platform, license, repository, team size, languages)
 - **Overview** — one-paragraph summary of what the project is
 - **Core Philosophy** — the guiding idea behind the project's approach
 - **Technical Design** — strategic technology decisions and architecture constraints
 - **Goals** — numbered list of measurable project objectives
-- **Technology Stack** — table of strategic technology choices (platform, frameworks, key libraries)
-- **File Organization** — how the project directory is structured
 
 ### 02-principles.md
 
-Markdown document with the following sections:
-
-- **Key properties** — table of project metadata (name, owner, platform, license, repository, team size, languages)
-- **Principles** — numbered entries (P-001, P-002, ...) each with a short title and one-paragraph explanation. Principles are non-negotiable design rules that constrain all downstream decisions.
+Markdown document containing numbered entries (P-001, P-002, ...) each with a short title and one-paragraph explanation. Principles are non-negotiable design rules that constrain all downstream decisions.
 
 ### 03-functional-backlog.csv
 
@@ -50,7 +47,7 @@ Markdown document with the following sections:
 | Category | Functional area (e.g., Core Shell, CSV Editor, Navigation) |
 | Requirement | Short name for the capability |
 | Priority | 1 = must have, 2 = should have, 3 = wish |
-| Status | New, In Progress, Done |
+| Status | New, In Progress, Done, Wish (out-of-scope idea retained for future consideration) |
 | Source | Origin of the requirement (Design, Roadmap, Stakeholder) |
 | Detail | One-sentence description of the behavior, free of implementation specifics |
 
@@ -62,16 +59,23 @@ Markdown document with the following sections:
 | Category | Quality area (Security, Performance, Reliability, Compatibility, Build, UX, Maintainability) |
 | Requirement | Short name for the quality attribute |
 | Priority | 1 = must have, 2 = should have, 3 = wish |
-| Status | New, In Progress, Done |
+| Status | New, In Progress, Done, Wish (out-of-scope idea retained for future consideration) |
 | Source | Origin of the requirement |
 | Metric | Measurable acceptance criterion, free of implementation specifics |
 | Verification | How the metric is tested or confirmed |
 
-### 05-effort-estimates.csv
+### 05-technical-profile.md
+
+Markdown document with the following sections:
+
+- **Technology Stack** — table of strategic technology choices (platform, frameworks, key libraries)
+- **Module / File Organization** — how the project repository is structured
+
+### 06-effort-estimates.csv
 
 | Column | Description |
 |--------|-------------|
-| Module | Name of the work module or component |
+| Module | Name of the work module or component (maps to technical profile directory structure) |
 | Category | Functional area it belongs to |
 | Min MD | Optimistic estimate in man-days |
 | Max MD | Pessimistic estimate in man-days |
@@ -79,7 +83,7 @@ Markdown document with the following sections:
 
 The final row should contain a TOTAL with summed Min MD and Max MD.
 
-### 06-scenarios.md
+### 07-scenarios.md
 
 Markdown document containing numbered user scenarios. Each scenario follows this structure:
 
@@ -90,13 +94,13 @@ Markdown document containing numbered user scenarios. Each scenario follows this
 
 Scenarios are separated by horizontal rules.
 
-### 07-data-models.dbml
+### 08-data-models.dbml
 
 DBML (Database Markup Language) file defining the domain objects that flow through the system. For applications that do not use a database, this file documents the conceptual data model — the structures that exist at runtime, not physical tables.
 
 Each table represents a domain object with typed fields, primary keys, references, and descriptive notes.
 
-### 08-licensing.csv
+### 09-licensing.csv
 
 | Column | Description |
 |--------|-------------|
@@ -109,7 +113,7 @@ Each table represents a domain object with typed fields, primary keys, reference
 
 The final row should contain a CONCLUSION stating the most restrictive license and its effect on the project's own license.
 
-### 09-tasks.csv
+### 10-tasks.csv
 
 | Column | Description |
 |--------|-------------|
@@ -121,7 +125,7 @@ The final row should contain a CONCLUSION stating the most restrictive license a
 | Dependencies | Task IDs that must be completed first (e.g., T-001 T-003) |
 | Definition of Done | Observable condition that confirms completion |
 
-### 10-schedule.csv
+### 11-schedule.csv
 
 | Column | Description |
 |--------|-------------|
@@ -149,19 +153,19 @@ These files define *what the project is*. They are written during project incept
 - Any change invalidates all files in Tier 2 and Tier 3, which must be reviewed for impact
 - The bar for change is deliberately high
 
-### Tier 2 — Baselined (03–08)
+### Tier 2 — Baselined (03–09)
 
-**Backlogs, estimates, scenarios, data models, licensing.**
+**Backlogs, technical profile, estimates, scenarios, data models, licensing.**
 
 These files define *what the project delivers and how*. They are elaborated during planning and baselined before execution begins. Changes during execution are possible but controlled.
 
 - Changes must be justified and recorded
-- Each change should be assessed for impact on downstream files (especially 09–10)
+- Each change should be assessed for impact on downstream files (especially 10–11)
 - Scope additions to backlogs should be flagged as post-baseline and tracked separately (e.g., new priority tier, status marker)
 - The data model and scenarios should remain consistent with the backlog — a backlog change may require updates to both
 - The licensing file must be updated when dependencies are added or removed, and reviewed for impact on the project's own license
 
-### Tier 3 — Living (09–10)
+### Tier 3 — Living (10–11)
 
 **Tasks, schedule.**
 

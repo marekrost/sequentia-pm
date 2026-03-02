@@ -3,6 +3,11 @@
 // as a source of project truth. These are not database tables but represent
 // the domain objects that flow through the application at the runtime.
 
+Table recent_project {
+  path varchar [pk, note: 'Absolute path to a previously opened project directory']
+  opened_at timestamp [not null, note: 'When the project was last opened']
+}
+
 Table project_directory {
   path varchar [pk, note: 'Absolute path to the opened directory']
   scanned_at timestamp [note: 'When the directory was last scanned']

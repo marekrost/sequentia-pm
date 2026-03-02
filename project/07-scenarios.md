@@ -12,7 +12,7 @@
 6. Tab bar populates with tabs sorted by prefix number
 7. First tab activates automatically, displaying the appropriate editor
 
-**Expected result:** All matching files appear as tabs. Files without valid prefixes or unsupported extensions are silently ignored.
+**Expected result:** All matching files appear as tabs sorted by prefix. Files with supported extensions but missing or unreadable prefixes appear at the end of the tab bar. Files with unsupported extensions are shown as tabs but display an unsupported-format notice instead of an editor. Files that are both unsupported and without a numeric prefix appear at the very end.
 
 ---
 
@@ -20,7 +20,7 @@
 
 **Actor:** Developer
 
-1. User clicks a `.md` tab (e.g. "00 charter")
+1. User clicks a `.md` tab (e.g. "01 charter")
 2. Split pane opens: Monaco editor on the left, rendered HTML preview on the right
 3. User types markdown in the editor
 4. Preview updates in real-time (debounced 200ms)
@@ -35,7 +35,7 @@
 
 **Actor:** Project Manager
 
-1. User clicks a `.csv` tab (e.g. "02 functional backlog")
+1. User clicks a `.csv` tab (e.g. "03 functional backlog")
 2. Spreadsheet grid renders with column headers from the first CSV row
 3. User clicks a cell and types a new value
 4. Tab shows dirty indicator (*)
@@ -50,7 +50,7 @@
 
 **Actor:** Developer
 
-1. User clicks a `.dbml` tab (e.g. "06 data models")
+1. User clicks a `.dbml` tab (e.g. "08 data models")
 2. Split pane opens: Monaco editor with DBML syntax highlighting (left), SVG ERD diagram (right)
 3. User modifies a table definition in the editor
 4. After a short debounce (400ms), the SVG diagram re-renders
@@ -70,9 +70,9 @@
 2. User edits a project file externally (e.g. via VS Code or `git pull`)
 3. Chokidar detects the file change
 4. If the file's buffer in Sequentia is clean (no unsaved edits), content reloads automatically
-5. If the buffer is dirty, the user is not interrupted (external change is ignored to protect unsaved work)
+5. If the buffer is dirty, a prompt appears asking the user whether to reload the external changes or keep the unsaved version
 
-**Expected result:** Clean files stay in sync with disk. Dirty files are never clobbered.
+**Expected result:** Clean files stay in sync with disk. Dirty files prompt the user before any reload.
 
 ---
 
