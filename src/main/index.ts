@@ -1,7 +1,45 @@
 import { app, BrowserWindow, nativeTheme, shell } from 'electron'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { registerIpcHandlers } from './ipc/handlers'
 import { buildAppMenu } from './menu'
+
+function parseArgs(argv: string[]): { project?: string; help?: boolean } {
+  // In dev mode electron-vite passes extra args; skip everything up to '--'
+  // In production, skip argv[0] (binary path)
+  const args = argv.slice(app.isPackaged ? 1 : argv.indexOf('--') + 1)
+  const result: { project?: string; help?: boolean } = {}
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i]
+    if (arg === '--help' || arg === '-h') {
+      result.help = true
+    } else if (arg === '--project' || arg === '-p') {
+      const next = args[i + 1]
+      if (next && !next.startsWith('-')) {
+        result.project = resolve(next)
+        i++
+      }
+    }
+  }
+  return result
+}
+
+const cliArgs = parseArgs(process.argv)
+
+if (cliArgs.help) {
+  process.stdout.write(
+    `Sequentia PM — local-first project management
+
+Usage:
+  sequentia-pm [options]
+
+Options:
+  -p, --project <path>  Open the given directory as a project
+  -h, --help            Show this help message and exit
+`
+  )
+  process.exit(0)
+}
 
 // Force dark theme for native UI (menubar, dialogs) on Linux/Flatpak
 if (process.platform === 'linux') {
@@ -32,6 +70,9 @@ function createWindow(): BrowserWindow {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    if (cliArgs.project) {
+      mainWindow.webContents.send('menu:open-recent', cliArgs.project)
+    }
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

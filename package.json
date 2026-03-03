@@ -12,6 +12,7 @@
       "buildResources": "resources"
     },
     "linux": {
+      "category": "Development",
       "icon": "resources/icon.png",
       "target": ["AppImage", "deb", "flatpak"],
       "desktop": {
