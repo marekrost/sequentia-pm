@@ -61,14 +61,32 @@ export function useFileContent(filePath: string): UseFileContentReturn {
     const unsub = window.api.onFileChanged((changedPath) => {
       if (changedPath !== filePath) return
       const isDirty = content !== savedContent
-      if (isDirty) return // don't clobber unsaved changes
-      window.api.readFile(filePath).then((text) => {
-        setContent(text)
-        setSavedContent(text)
-      })
+
+      if (!isDirty) {
+        window.api.readFile(filePath).then((text) => {
+          setContent(text)
+          setSavedContent(text)
+        })
+        return
+      }
+
+      const fileName = filePath.split('/').pop() ?? filePath
+      window.api
+        .showConfirmDialog(
+          `"${fileName}" has been changed externally.`,
+          'You have unsaved edits. Do you want to reload the file or keep your local version?'
+        )
+        .then((reload) => {
+          if (!reload) return
+          window.api.readFile(filePath).then((text) => {
+            setContent(text)
+            setSavedContent(text)
+            markClean(filePath)
+          })
+        })
     })
     return unsub
-  }, [filePath, content, savedContent])
+  }, [filePath, content, savedContent, markClean])
 
   const save = useCallback(async () => {
     if (content === null) return

@@ -17,8 +17,11 @@ function EditorRouter({ file }: EditorRouterProps): React.JSX.Element {
       return <DbmlEditor file={file} />
     default:
       return (
-        <div className="flex h-full items-center justify-center text-neutral-500">
-          Unsupported file type
+        <div className="flex h-full flex-col items-center justify-center gap-2 text-neutral-500">
+          <span className="text-lg font-medium">Unsupported format</span>
+          <span className="text-sm">
+            No editor available for <code className="rounded bg-neutral-700 px-1.5 py-0.5 text-neutral-300">.{file.extension}</code> files
+          </span>
         </div>
       )
   }

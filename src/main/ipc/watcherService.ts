@@ -26,21 +26,16 @@ export class WatcherService {
       awaitWriteFinish: { stabilityThreshold: 200, pollInterval: 50 }
     })
 
-    const fileFilter = /\.(md|csv|dbml)$/
-
     this.watcher.on('change', (filePath) => {
-      if (!fileFilter.test(filePath)) return
       if (this.writeLock.has(filePath)) return
       this.mainWindow.webContents.send('file:changed', filePath)
     })
 
     this.watcher.on('add', (filePath) => {
-      if (!fileFilter.test(filePath)) return
       this.mainWindow.webContents.send('file:added', filePath)
     })
 
     this.watcher.on('unlink', (filePath) => {
-      if (!fileFilter.test(filePath)) return
       this.mainWindow.webContents.send('file:removed', filePath)
     })
   }

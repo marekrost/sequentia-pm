@@ -18,6 +18,11 @@ export function buildAppMenu(mainWindow: BrowserWindow): void {
       label: 'Project',
       submenu: [
         {
+          label: 'Create...',
+          accelerator: 'CmdOrCtrl+N',
+          click: () => mainWindow.webContents.send('menu:create-project')
+        },
+        {
           label: 'Open...',
           accelerator: 'CmdOrCtrl+O',
           click: () => mainWindow.webContents.send('menu:open-project')

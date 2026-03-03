@@ -5,6 +5,9 @@ const api = {
   openDirectoryDialog: (): Promise<string | null> =>
     ipcRenderer.invoke('dialog:openDirectory'),
 
+  showConfirmDialog: (message: string, detail?: string): Promise<boolean> =>
+    ipcRenderer.invoke('dialog:confirm', message, detail),
+
   readFile: (filePath: string): Promise<string> =>
     ipcRenderer.invoke('file:read', filePath),
 
@@ -49,6 +52,15 @@ const api = {
 
   addRecentProject: (projectPath: string): Promise<string[]> =>
     ipcRenderer.invoke('store:addRecentProject', projectPath),
+
+  createProjectDir: (parentPath: string): Promise<string> =>
+    ipcRenderer.invoke('project:create', parentPath),
+
+  onMenuCreateProject: (callback: () => void): (() => void) => {
+    const handler = (): void => callback()
+    ipcRenderer.on('menu:create-project', handler)
+    return () => ipcRenderer.removeListener('menu:create-project', handler)
+  },
 
   onMenuOpenProject: (callback: () => void): (() => void) => {
     const handler = (): void => callback()

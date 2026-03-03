@@ -18,6 +18,12 @@ function App(): React.JSX.Element {
 
   // Menu event handlers
   useEffect(() => {
+    const unsubCreate = window.api.onMenuCreateProject(async () => {
+      const parentPath = await window.api.openDirectoryDialog()
+      if (!parentPath) return
+      const projectDir = await window.api.createProjectDir(parentPath)
+      await openProject(projectDir)
+    })
     const unsubOpen = window.api.onMenuOpenProject(async () => {
       const path = await window.api.openDirectoryDialog()
       if (path) await openProject(path)
@@ -29,6 +35,7 @@ function App(): React.JSX.Element {
       closeProject()
     })
     return () => {
+      unsubCreate()
       unsubOpen()
       unsubRecent()
       unsubClose()

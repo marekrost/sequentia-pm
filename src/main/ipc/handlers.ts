@@ -1,4 +1,6 @@
 import { ipcMain, dialog, BrowserWindow } from 'electron'
+import { mkdir } from 'fs/promises'
+import { join } from 'path'
 import { readFile, writeFile } from './fileOperations'
 import { scanDirectory } from '../utils/directoryScanner'
 import { WatcherService } from './watcherService'
@@ -14,6 +16,23 @@ export function registerIpcHandlers(mainWindow: BrowserWindow): void {
       properties: ['openDirectory']
     })
     return result.canceled ? null : result.filePaths[0]
+  })
+
+  ipcMain.handle('project:create', async (_e, parentPath: string) => {
+    const projectDir = join(parentPath, 'project')
+    await mkdir(projectDir, { recursive: true })
+    return projectDir
+  })
+
+  ipcMain.handle('dialog:confirm', async (_e, message: string, detail?: string) => {
+    const result = await dialog.showMessageBox(mainWindow, {
+      type: 'question',
+      buttons: ['Reload', 'Keep local'],
+      defaultId: 1,
+      message,
+      detail: detail ?? ''
+    })
+    return result.response === 0 // true = Reload
   })
 
   ipcMain.handle('file:read', async (_e, filePath: string) => {

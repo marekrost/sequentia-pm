@@ -2,6 +2,7 @@ import type { ProjectFile } from './project'
 
 export interface ElectronAPI {
   openDirectoryDialog: () => Promise<string | null>
+  showConfirmDialog: (message: string, detail?: string) => Promise<boolean>
   readFile: (filePath: string) => Promise<string>
   writeFile: (filePath: string, content: string) => Promise<void>
   scanDirectory: (dirPath: string) => Promise<ProjectFile[]>
@@ -13,6 +14,8 @@ export interface ElectronAPI {
   onFileRemoved: (callback: (filePath: string) => void) => () => void
   getRecentProjects: () => Promise<string[]>
   addRecentProject: (projectPath: string) => Promise<string[]>
+  createProjectDir: (parentPath: string) => Promise<string>
+  onMenuCreateProject: (callback: () => void) => () => void
   onMenuOpenProject: (callback: () => void) => () => void
   onMenuOpenRecent: (callback: (projectPath: string) => void) => () => void
   onMenuCloseProject: (callback: () => void) => () => void
