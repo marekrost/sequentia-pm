@@ -29,7 +29,7 @@ A new project management template can be reconstructed from this document alone 
 
 Markdown document with the following sections:
 
-- **Key properties** — table of project metadata (name, owner, platform, license, repository, team size, languages)
+- **Key properties** — table of project metadata (name, owner, platform, license, repository, team size, business language, develop language)
 - **Overview** — one-paragraph summary of what the project is
 - **Core Philosophy** — the guiding idea behind the project's approach
 - **Technical Design** — strategic technology decisions and architecture constraints
