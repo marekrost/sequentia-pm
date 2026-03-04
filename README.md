@@ -43,7 +43,15 @@ Compiles the app to the `out/` directory. To package a distributable:
 npx electron-builder
 ```
 
-This builds all configured Linux targets. To build a specific one:
+### Linux
+
+This builds all configured Linux targets:
+
+```bash
+npx electron-builder --linux
+```
+
+To build a specific one:
 
 ```bash
 npx electron-builder --linux AppImage
@@ -56,6 +64,24 @@ npx electron-builder --linux flatpak
 | AppImage | Portable, no installation needed |
 | deb | Debian/Ubuntu package |
 | flatpak | Sandboxed — requires `flatpak-builder` and the Freedesktop runtime |
+
+### Windows
+
+```bash
+npm run package:win
+```
+
+This builds all configured Windows targets (NSIS installer and portable executable). To build a specific one:
+
+```bash
+npx electron-builder --win nsis
+npx electron-builder --win portable
+```
+
+| Target | Notes |
+|--------|-------|
+| nsis | Standard Windows installer |
+| portable | Standalone `.exe`, no installation needed |
 
 ### Building flatpak
 

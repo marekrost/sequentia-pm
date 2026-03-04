@@ -11,6 +11,13 @@
     "directories": {
       "buildResources": "resources"
     },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "resources/icon.png"
+    },
     "linux": {
       "category": "Development",
       "icon": "resources/icon.png",
@@ -30,6 +37,7 @@
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "preview": "electron-vite preview",
+    "package:win": "npm run build && electron-builder --win",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
