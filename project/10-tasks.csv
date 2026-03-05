@@ -34,3 +34,5 @@ T-032,Add column insert/delete to CSV editor,Phase 5,Done,0.5,T-016,User can ins
 T-033,Add column sorting to CSV editor,Phase 5,Done,0.5,T-016,Clicking a column header sorts rows ascending/descending
 T-034,Add markdown formatting toolbar,Phase 5,Done,0.5,T-012,Toolbar buttons for bold/italic/heading/link/list formatting
 T-035,"Add ""Project -> Create"" capability",Phase 6,Done,0.5,,"Project menu contains new option to create a project. This closes any existing project in process. Creating project means that Native File browser dialog is opened and target folder is chosen, the app automatically creates sub-folder named ""project"" inside if it doesn't exist and opens that as a project."
+T-036,App window on Linux shows x.org icon instead of real app icon in taskbar.,Phase 6,Done,0.1,,The app displays proper icon in linux taskbar.
+T-037,Switching between tabs/files resets file to last-saved state instead of keeping the unsaved edits. This happens for all editors,Phase 6,Done,0.1,,"The app keeps the unsaved buffer alive until explicitly saved or until detecting external file change, when it prompts the existing warning as usual."

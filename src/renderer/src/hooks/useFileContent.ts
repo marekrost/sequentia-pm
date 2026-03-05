@@ -22,14 +22,25 @@ export function useFileContent(filePath: string): UseFileContentReturn {
     setLoading(true)
     setError(null)
 
+    const buffer = useProjectStore.getState().buffers.get(filePath)
+
     window.api
       .readFile(filePath)
       .then((text) => {
         if (!cancelled) {
-          setContent(text)
           setSavedContent(text)
+          if (buffer !== undefined) {
+            setContent(buffer)
+            if (buffer !== text) {
+              markDirty(filePath)
+            } else {
+              markClean(filePath)
+            }
+          } else {
+            setContent(text)
+            markClean(filePath)
+          }
           setLoading(false)
-          markClean(filePath)
         }
       })
       .catch((err) => {
@@ -42,15 +53,17 @@ export function useFileContent(filePath: string): UseFileContentReturn {
     return () => {
       cancelled = true
     }
-  }, [filePath, markClean])
+  }, [filePath, markClean, markDirty])
 
   const handleSetContent = useCallback(
     (value: string) => {
       setContent(value)
       if (value !== savedContent) {
         markDirty(filePath)
+        useProjectStore.getState().setBuffer(filePath, value)
       } else {
         markClean(filePath)
+        useProjectStore.getState().clearBuffer(filePath)
       }
     },
     [filePath, savedContent, markDirty, markClean]
@@ -82,6 +95,7 @@ export function useFileContent(filePath: string): UseFileContentReturn {
             setContent(text)
             setSavedContent(text)
             markClean(filePath)
+            useProjectStore.getState().clearBuffer(filePath)
           })
         })
     })
@@ -94,6 +108,7 @@ export function useFileContent(filePath: string): UseFileContentReturn {
       await window.api.writeFile(filePath, content)
       setSavedContent(content)
       markClean(filePath)
+      useProjectStore.getState().clearBuffer(filePath)
     } catch (err) {
       setError(String(err))
     }

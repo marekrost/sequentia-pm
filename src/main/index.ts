@@ -48,6 +48,9 @@ if (process.platform === 'linux') {
 nativeTheme.themeSource = 'dark'
 
 const isDev = !app.isPackaged
+const iconPath = isDev
+  ? join(__dirname, '../../resources/icon.png')
+  : join(process.resourcesPath, 'icon.png')
 
 function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -57,6 +60,7 @@ function createWindow(): BrowserWindow {
     minHeight: 600,
     show: false,
     backgroundColor: '#171717',
+    icon: iconPath,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: true,
