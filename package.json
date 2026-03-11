@@ -28,8 +28,13 @@
       "desktop": {
         "Name": "Sequentia PM",
         "Comment": "Local-first, air-gapped, file-driven project management interface",
-        "Categories": "Office;ProjectManagement"
+        "Categories": "Development;Office;ProjectManagement"
       }
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "icon": "resources/icon.icns",
+      "category": "public.app-category.developer-tools"
     },
     "flatpak": {
       "runtimeVersion": "24.08",
@@ -41,6 +46,8 @@
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "package:win": "npm run build && electron-builder --win",
+    "package:mac": "npm run build && electron-builder --mac",
+    "package:linux": "npm run build && electron-builder --linux",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {

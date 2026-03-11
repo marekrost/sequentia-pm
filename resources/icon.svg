@@ -12,6 +12,8 @@
    inkscape:export-filename="icon.png"
    inkscape:export-xdpi="48"
    inkscape:export-ydpi="48"
+   inkscape:export-batch-path="/home/marek/Projects/sequentia-pm/resources"
+   inkscape:export-batch-name=""
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -409,13 +411,20 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.5"
-     inkscape:cx="577"
-     inkscape:cy="245"
+     inkscape:cx="576"
+     inkscape:cy="484"
      inkscape:current-layer="g1" />
   <g
      inkscape:groupmode="layer"
-     inkscape:label="Image"
+     inkscape:label="icon"
      id="g1">
+    <rect
+       style="fill:#ffffff;fill-opacity:0;fill-rule:evenodd;stroke-width:1"
+       id="rect1"
+       width="1024"
+       height="1024"
+       x="0"
+       y="0" />
     <g
        id="g1081345-8-1"
        transform="matrix(1.475225,0,0,1.4756442,-267.42403,258.84714)"

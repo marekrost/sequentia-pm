@@ -33,72 +33,43 @@ This launches the Electron app with hot-reload for the renderer process.
 
 ## Build
 
-```bash
-npm run build
-```
-
-Compiles the app to the `out/` directory. To package a distributable:
+Compile the app, then package for your platform:
 
 ```bash
-npx electron-builder
+npm run build                        # compile to out/
+npm run package:win                  # Windows
+npm run package:mac                  # macOS
+npm run package:linux                # Linux
 ```
 
-### Linux
+To build a single target, pass it explicitly: `npx electron-builder --linux AppImage`.
 
-This builds all configured Linux targets:
+Distributables are output to `dist/`.
 
-```bash
-npx electron-builder --linux
-```
+### Build targets
 
-To build a specific one:
+| Platform | Target | Command | Output |
+|----------|--------|---------|--------|
+| Windows | `nsis` | `npx electron-builder --win nsis` | Standard installer |
+| Windows | `portable` | `npx electron-builder --win portable` | Standalone `.exe`, no installation needed |
+| macOS | `dmg` | `npx electron-builder --mac dmg` | Disk image for drag-to-install |
+| macOS | `zip` | `npx electron-builder --mac zip` | ZIP archive, suitable for auto-update |
+| Linux | `AppImage` | `npx electron-builder --linux AppImage` | Portable, no installation needed |
+| Linux | `deb` | `npx electron-builder --linux deb` | Debian/Ubuntu package |
+| Linux | `flatpak` | `npx electron-builder --linux flatpak` | Sandboxed package (see below) |
 
-```bash
-npx electron-builder --linux AppImage
-npx electron-builder --linux deb
-npx electron-builder --linux flatpak
-```
+### Platform notes
 
-| Target | Notes |
-|--------|-------|
-| AppImage | Portable, no installation needed |
-| deb | Debian/Ubuntu package |
-| flatpak | Sandboxed — requires `flatpak-builder` and the Freedesktop runtime |
+**macOS** — The `.app` can be dragged directly to `Applications`. For distribution to other users, code signing and notarization are recommended.
 
-### Windows
-
-```bash
-npm run package:win
-```
-
-This builds all configured Windows targets (NSIS installer and portable executable). To build a specific one:
-
-```bash
-npx electron-builder --win nsis
-npx electron-builder --win portable
-```
-
-| Target | Notes |
-|--------|-------|
-| nsis | Standard Windows installer |
-| portable | Standalone `.exe`, no installation needed |
-
-### Building flatpak
-
-For flatpak, install the build dependencies first:
+**Flatpak** — Requires additional build dependencies:
 
 ```bash
 sudo apt install flatpak-builder
 flatpak install org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08 org.electronjs.Electron2.BaseApp//24.08
 ```
 
-To build the flatpak file run:
-
-```bash
-npx electron-builder --linux flatpak
-```
-
-To install the finished package run:
+Install the built package with:
 
 ```bash
 flatpak install --user --bundle 'dist/Sequentia PM-0.1.0-x86_64.flatpak'
