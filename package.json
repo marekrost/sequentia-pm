@@ -1,6 +1,6 @@
 {
   "name": "sequentia-pm",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Local-first, air-gapped, file-driven project management interface",
   "author": "Marek Rost <marek.rost@gmail.com>",
   "license": "GPL-3.0-only",
